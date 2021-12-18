@@ -118,15 +118,9 @@ export default {
         })
 
         const taskViews = reactive({
-            allTaskLength: computed(() => {
-                return taskLists.all.length
-            }),
-            currentTaskLength: computed(() => {
-                return taskLists.current.length
-            }),
-            completedTaskLength: computed(() => {
-                return taskLists.completed.length
-            })
+            allTaskLength: computed(() => taskLists.all.length),
+            currentTaskLength: computed(() => taskLists.current.length),
+            completedTaskLength: computed(() => taskLists.completed.length)
         })
 
         const taskListOverview = reactive([
