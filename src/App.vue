@@ -7,7 +7,7 @@
                 type="text"
                 placeholder="Type a new todo item"
                 class="new-task-input"
-                v-model="state.newTaskInput"
+                v-model="newTaskInput"
                 @keyup.enter="addTask"
             />
             <button
@@ -18,13 +18,23 @@
         <nav>
             <ul class="tab-nav-wrapper">
                 <li class="tab-nav-item">
-                    <button class="tab-nav-item-button">All (3)</button>
+                    <button
+                        class="tab-nav-item-button"
+                        @click="setView('All')"
+                    >All ({{ allTaskLength }})</button>
                 </li>
                 <li class="tab-nav-item">
-                    <button class="tab-nav-item-button">Current (2)</button>
+                    <button
+                        class="tab-nav-item-button"
+                        @click="setView('Current')"
+                    >Current ({{ currentTaskLength }})</button>
                 </li>
-                <li class="tab-nav-item">
-                    <button class="tab-nav-item-button">Completed (1)</button>
+                <li class="
+                        tab-nav-item">
+                    <button
+                        class="tab-nav-item-button"
+                        @click="setView('Completed')"
+                    >Completed ({{ completedTaskLength }})</button>
                 </li>
             </ul>
         </nav>
@@ -36,7 +46,10 @@
             >
                 <div class="task-list-checkbox-wrapper">
                     <IconCheckCircle v-show="taskItem.complete" />
-                    <IconCircle v-show="!taskItem.complete" />
+                    <IconCircle
+                        v-show="!taskItem.complete"
+                        @click=""
+                    />
                     <input
                         type="checkbox"
                         v-model="taskItem.complete"
@@ -103,6 +116,19 @@ export default {
                 state.taskList.filter(item => item.complete === true)
             )
         })
+
+        const taskViews = reactive({
+            allTaskLength: computed(() => {
+                return taskLists.all.length
+            }),
+            currentTaskLength: computed(() => {
+                return taskLists.current.length
+            }),
+            completedTaskLength: computed(() => {
+                return taskLists.completed.length
+            })
+        })
+
         const taskListOverview = reactive([
             { name: 'All', length: computed(() => taskLists.all.length) },
             { name: 'Current', length: computed(() => taskLists.current.length) },
@@ -138,8 +164,8 @@ export default {
             state.currentView = viewLabel
         }
         return {
-            //...toRefs(state),
-            state,
+            ...toRefs(state),
+            ...toRefs(taskViews),
             addTask,
             deleteTask,
             setView,
